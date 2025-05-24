@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagrama de Gantt - Proyecto Kton (3 Meses)</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+        line-height: 1.6;
+    }
+    h1 {
+        text-align: center;
+        color: #0056b3;
+        margin-bottom: 30px;
+    }
+    .gantt-chart-container {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.075);
+    }
+    .gantt-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 700px; /* Ajustado para menos semanas */
+    }
+    .gantt-table th, .gantt-table td {
+        border: 1px solid #e9ecef;
+        padding: 12px 15px;
+        text-align: left;
+        font-size: 0.9em;
+        vertical-align: middle;
+    }
+    .gantt-table th {
+        background-color: #007bff;
+        color: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        font-weight: 600;
+    }
+    .gantt-task-name {
+        width: 220px;
+        font-weight: 500;
+        background-color: #f8f9fa;
+    }
+    .gantt-timeline-week {
+        min-width: 40px; /* Un poco más de ancho por semana al haber menos */
+        font-size: 0.8em;
+        text-align: center;
+    }
+    .gantt-bar-cell {
+        padding: 5px 2px;
+        height: 25px;
+        position: relative;
+    }
+    .gantt-bar {
+        height: 80%;
+        margin: auto 0;
+        background-color: #28a745;
+        display: block;
+        border-radius: 4px;
+        opacity: 0.9;
+        position: absolute;
+        top: 10%;
+        left: 1px;
+        right: 1px;
+    }
+    /* Colores específicos por fase */
+    .gantt-bar-planning { background-color: #17a2b8; }
+    .gantt-bar-design { background-color: #6f42c1; }
+    .gantt-bar-development { background-color: #fd7e14; }
+    .gantt-bar-testing { background-color: #ffc107; }
+    .gantt-bar-deployment { background-color: #20c997; }
+
+    .gantt-milestone {
+        background-color: #dc3545 !important;
+        border-radius: 50% !important;
+        width: 12px;
+        height: 12px;
+        margin: auto;
+        display: block;
+        position: relative;
+    }
+    .gantt-milestone-cell {
+        padding: 0;
+        text-align: center;
+    }
+
+    .gantt-milestone-cell[data-tooltip] {
+        position: relative;
+    }
+    .gantt-milestone-cell[data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: 50%;
+        bottom: 100%;
+        transform: translateX(-50%) translateY(-5px);
+        background-color: #343a40;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        z-index: 20;
+        white-space: nowrap;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+</style>
+</head>
+<body>
+
+<h1>Diagrama de Gantt Estimado - Proyecto Kton (Plan 3 Meses)</h1>
+
+<div class="gantt-chart-container">
+    <table class="gantt-table">
+        <thead>
+            <tr>
+                <th class="gantt-task-name">Fase / Tarea Principal</th>
+                <script>
+                    const totalWeeks = 12; // Total de semanas para 3 meses
+                    for (let i = 1; i <= totalWeeks; i++) {
+                        document.write(`<th class="gantt-timeline-week">S${i}</th>`);
+                    }
+                </script>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="gantt-task-name">F1: Inicio y Planificación</td>
+                <td colspan="1" class="gantt-bar-cell"><div class="gantt-bar gantt-bar-planning"></div></td>
+                <td class="gantt-milestone-cell" data-tooltip="Hito 1: Plan Aprobado (S1)">
+                    <div class="gantt-milestone"></div>
+                </td>
+                <td colspan="10"></td> </tr>
+            <tr>
+                <td class="gantt-task-name">F2: Diseño</td>
+                <td colspan="1"></td> <td colspan="2" class="gantt-bar-cell"><div class="gantt-bar gantt-bar-design"></div></td>
+                 <td class="gantt-milestone-cell" data-tooltip="Hito 2: Diseño Completado (S3)">
+                    <div class="gantt-milestone"></div>
+                </td>
+                <td colspan="8"></td> </tr>
+            <tr>
+                <td class="gantt-task-name">F3: Desarrollo (MVP Core)</td>
+                <td colspan="3"></td> <td colspan="6" class="gantt-bar-cell"><div class="gantt-bar gantt-bar-development"></div></td>
+                 <td class="gantt-milestone-cell" data-tooltip="Hito 3: MVP Funcional (S9)">
+                    <div class="gantt-milestone"></div>
+                </td>
+                <td colspan="2"></td> </tr>
+            <tr>
+                <td class="gantt-task-name">F4: Pruebas</td>
+                <td colspan="9"></td> <td colspan="2" class="gantt-bar-cell"><div class="gantt-bar gantt-bar-testing"></div></td>
+                <td class="gantt-milestone-cell" data-tooltip="Hito 4: Sistema Validado (S11)">
+                    <div class="gantt-milestone"></div>
+                </td>
+                </tr>
+            <tr>
+                <td class="gantt-task-name">F5: Despliegue y Cierre</td>
+                <td colspan="11"></td> <td colspan="1" class="gantt-bar-cell"><div class="gantt-bar gantt-bar-deployment"></div></td>
+                </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Nota: El colspan de las celdas de relleno y las celdas vacías
+    // se ajusta manualmente para el cronograma de 12 semanas.
+    // La cabecera de semanas se genera con JS.
+</script>
+
+</body>
+</html>
