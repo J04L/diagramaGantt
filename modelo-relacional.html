@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Colecciones (MongoDB) - Proyecto Kton</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.5;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .diagram-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            padding: 20px;
+        }
+        .collection-box { /* Cambiado de class-box a collection-box */
+            background-color: #ffffff;
+            border: 1px solid #16a085; /* Borde con temática MongoDB (verde azulado) */
+            border-radius: 8px;
+            padding: 15px;
+            width: 320px; /* Un poco más de ancho para contenido embebido */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        .collection-box:hover {
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .collection-box h3 {
+            background-color: #1abc9c; /* Verde MongoDB */
+            color: white;
+            padding: 10px;
+            margin: -15px -15px 15px -15px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .collection-box summary {
+            font-weight: bold;
+            cursor: pointer;
+            padding: 5px 0;
+            color: #16a085;
+            font-size: 1em;
+        }
+        .collection-box details {
+            margin-bottom: 10px;
+            border-left: 3px solid #1abc9c;
+            padding-left: 10px;
+        }
+        .collection-box details[open] summary {
+            margin-bottom: 8px;
+        }
+        .collection-box ul {
+            list-style-type: none;
+            padding-left: 10px;
+            font-size: 0.9em;
+        }
+        .collection-box ul li {
+            padding: 3px 0;
+        }
+        .pk { /* Se refiere a _id en MongoDB */
+            font-weight: bold;
+            color: #c0392b;
+        }
+        .ref-id { /* Para IDs de referencia */
+            font-style: italic;
+            color: #2980b9; /* Azul para referencias */
+        }
+        .embedded-doc {
+            display: block;
+            margin-left: 10px;
+            padding-left: 10px;
+            border-left: 2px dotted #7f8c8d;
+            font-size: 0.95em;
+        }
+        .embedded-doc strong {
+            color: #555;
+        }
+        .structure-info { /* Reemplaza relation-info */
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ecf0f1;
+        }
+        .structure-info strong {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <h1>Diagrama de Colecciones (MongoDB) - Proyecto Kton</h1>
+    <div class="diagram-container">
+
+        <div class="collection-box">
+            <h3>Colección: usuarios</h3>
+            <details>
+                <summary>Campos del Documento</summary>
+                <ul>
+                    <li><span class="pk">_id</span> (ObjectID)</li>
+                    <li>nombre: String</li>
+                    <li>email: String (único)</li>
+                    <li>hashContraseña: String</li>
+                    <li>fechaNacimiento: Date</li>
+                    <li>sexo: String</li>
+                    <li>alturaCm: Number</li>
+                    <li><span class="ref-id">idNivelActividad</span> (ObjectID, ref a nivelesActividad)</li>
+                    <li>
+                        objetivoActual: Documento Embebido
+                        <span class="embedded-doc">
+                            <strong>tipoObjetivo</strong>: String<br>
+                            <strong>caloriasDiariasMeta</strong>: Number<br>
+                            <strong>proteinasGrMeta</strong>: Number<br>
+                            <strong>grasasGrMeta</strong>: Number<br>
+                            <strong>carbohidratosGrMeta</strong>: Number<br>
+                            <strong>pesoObjetivoKg</strong>: Number (opcional)<br>
+                            <strong>fechaInicio</strong>: Date
+                        </span>
+                    </li>
+                    <li>
+                        consumos: Array
+                        <span class="embedded-doc">
+                            [{<br>
+                            &nbsp;&nbsp;<strong>fecha</strong>: Date,<br>
+                            &nbsp;&nbsp;<strong>tipoComida</strong>: String (ej: Desayuno, Almuerzo),<br>
+                            &nbsp;&nbsp;<strong>idRecetaConsumida</strong>: ObjectID (ref a recetas),<br>
+                            &nbsp;&nbsp;<strong>caloriasEstimadas</strong>: Number,<br>
+                            &nbsp;&nbsp;<strong>proteinasEstimadasGr</strong>: Number (opcional),<br>
+                            &nbsp;&nbsp;<strong>grasasEstimadasGr</strong>: Number (opcional),<br>
+                            &nbsp;&nbsp;<strong>carbsEstimadosGr</strong>: Number (opcional)<br>
+                            }]
+                        </span>
+                    </li>
+                </ul>
+            </details>
+            <details>
+                <summary>Operaciones Típicas (Conceptuales)</summary>
+                <ul>
+                    <li>crearUsuario()</li>
+                    <li>buscarUsuarioPorEmail()</li>
+                    <li>actualizarPerfilUsuario()</li>
+                    <li>agregarConsumo()</li>
+                    <li>agregarRegistroPeso()</li>
+                    <li>actualizarObjetivo()</li>
+                </ul>
+            </details>
+            <div class="structure-info">
+                <strong>Estructura y Referencias:</strong>
+                <ul>
+                    <li>Embebe `objetivoActual`, `historialPeso` y `consumos`.</li>
+                    <li>Referencia a `nivelesActividad` por `idNivelActividad`.</li>
+                    <li>`consumos.idRecetaConsumida` puede referenciar a `recetas`.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="collection-box">
+            <h3>Colección: nivelesActividad</h3>
+            <details>
+                <summary>Campos del Documento</summary>
+                <ul>
+                    <li><span class="pk">_id</span> (ObjectID)</li>
+                    <li>nombre: String (ej: Sedentario, Ligero)</li>
+                    <li>factorMultiplicadorKcal: Number</li>
+                </ul>
+            </details>
+            <div class="structure-info">
+                <strong>Estructura y Referencias:</strong>
+                <ul>
+                    <li>Colección simple, referenciada por `usuarios`.</li>
+                    <li>Podría ser data estática en la app si no se gestiona dinámicamente.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="collection-box">
+            <h3>Colección: recetas</h3>
+            <details>
+                <summary>Campos del Documento</summary>
+                <ul>
+                    <li><span class="pk">_id</span> (ObjectID)</li>
+                    <li>nombre: String</li>
+                    <li>descripcion: String (opcional)</li>
+                    <li>instrucciones: String</li>
+                    <li>tiempoPreparacionMin: Number (opcional)</li>
+                    <li>numPorciones: Number (default: 1)</li>
+                    <li><span class="ref-id">idUsuarioCreador</span> (ObjectID, ref a usuarios)</li>
+                    <li>
+                        ingredientes: Array de Strings
+                        <span class="embedded-doc">
+                            (ej: ["200g de pechuga de pollo", "1 taza de arroz blanco", "1/2 brócoli"])
+                        </span>
+                    </li>
+                    <li>
+                        infoNutricionalPorPorcion:
+                        <span class="embedded-doc">
+                            <strong>calorias</strong>: Number<br>
+                            <strong>proteinasGr</strong>: Number<br>
+                            <strong>grasasGr</strong>: Number<br>
+                            <strong>carbohidratosGr</strong>: Number
+                        </span>
+                    </li>
+                     <li>tags: Array de Strings (ej: ["almuerzo", "pollo", "rápido"], opcional)</li>
+                </ul>
+            </details>
+            <details>
+                <summary>Operaciones Típicas (Conceptuales)</summary>
+                <ul>
+                    <li>crearReceta()</li>
+                    <li>buscarRecetasPorNombre()</li>
+                    <li>buscarRecetasPorTags()</li>
+                    <li>actualizarReceta()</li>
+                </ul>
+            </details>
+            <div class="structure-info">
+                <strong>Estructura y Referencias:</strong>
+                <ul>
+                    <li>Embebe `ingredientes` (como texto) y `infoNutricionalPorPorcion`.</li>
+                    <li>Referencia a `usuarios` (creador) por `idUsuarioCreador`.</li>
+                    <li>Puede ser referenciada por `usuarios.consumos.idRecetaConsumida`.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
